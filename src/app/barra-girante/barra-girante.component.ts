@@ -14,8 +14,12 @@ export class BarraGiranteComponent implements OnInit {
      @Input() state = true;
      @Output() stateChange = new EventEmitter<boolean>();
 
-      constructor() { }
-    //  nBar: string[] =  this.BARRAS;
+     public myarray: number[] = []
+
+      constructor() {
+
+      }
+
      iniciar() {
         this.state = !this.state;
         this.stateChange.emit(this.state);
@@ -45,9 +49,16 @@ export class BarraGiranteComponent implements OnInit {
       observer.next(2);
       observer.next(3);
       observer.complete();
+      this.myarray.push(1);
+      this.myarray.push(2);
+      this.myarray.push(3);
+      this.myarray.push(4);
+
       return {unsubscribe() {}};
     }
-      sequence = new Observable(this.sequenceSubscriber);
+    public strings$: Observable<number[]> = of(this.myarray);
+
+      //strings$ = new Observable(this.sequenceSubscriber);
       get numeros(){ return this.numbers };
 
 
