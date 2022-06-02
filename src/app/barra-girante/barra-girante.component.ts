@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {  Observable, Observer, of } from 'rxjs';
+import {  Observable, Observer, of, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-barra-girante',
@@ -14,11 +14,9 @@ export class BarraGiranteComponent implements OnInit {
      @Input() state = true;
      @Output() stateChange = new EventEmitter<boolean>();
 
-    public myarray: number[] = []
-    public strings$: Observable<number[]> = of(this.myarray);
-
+    public subject = new Subject<number[]>();
+    public strings$: Observable<number[]> = this.subject.asObservable();
       constructor() {
-
       }
 
      iniciar() {
@@ -40,42 +38,16 @@ export class BarraGiranteComponent implements OnInit {
          }
      }
 
-     get message() {       return this.state ? this.BARRAS[this.idInterval] : this.BARRAS[this.indice];     }
+     get message() {
+       return this.state ? this.BARRAS[this.idInterval] : this.BARRAS[this.indice];
+      }
 
-     numbers: Number[] | undefined;
-
-      sequenceSubscriber(observer: Observer<Number>) {
-      // entregar sincrónicamente 1, 2 y 3, luego completar
-      observer.next(1);
-      observer.next(2);
-      observer.next(3);
-      observer.complete();
-      this.myarray.push(1);
-      this.myarray.push(2);
-      this.myarray.push(3);
-      this.myarray.push(4);
-
-      return {unsubscribe() {}};
+    emitir() : void {
+      const numbers = [...Array(10).keys()].map(i=>i+1)
+      this.subject.next(numbers);
     }
 
- emitir() : Observable<number> {
-  return new Observable <number> (suscritor => {
-        for (let i = 1; i<=10; i++) {
-          suscritor.next(i);
-          this.myarray.push(i);
-        }
-        suscritor.complete();
-        // unsubscribe();
-        //this.numbers.subscribe(suscritor);
-   });
-  }
-
-      //strings$ = new Observable(this.sequenceSubscriber);
-      get numeros(){ return this.numbers };
-
-
     ngOnInit(): void {
-      this.emitir();
   }
 }
 
