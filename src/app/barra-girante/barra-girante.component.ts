@@ -48,6 +48,8 @@ export class BarraGiranteComponent implements OnInit {
     }
 
     ngOnInit(): void {
+      this.subject.subscribe(value => console.log(value));
+      this.subject.asObservable().subscribe(value => console.log(value));
   }
 }
 
