@@ -14,7 +14,8 @@ export class BarraGiranteComponent implements OnInit {
      @Input() state = true;
      @Output() stateChange = new EventEmitter<boolean>();
 
-     public myarray: number[] = []
+    public myarray: number[] = []
+    public strings$: Observable<number[]> = of(this.myarray);
 
       constructor() {
 
@@ -56,23 +57,27 @@ export class BarraGiranteComponent implements OnInit {
 
       return {unsubscribe() {}};
     }
-    public strings$: Observable<number[]> = of(this.myarray);
+
+ emitir() : Observable<number> {
+  return new Observable <number> (suscritor => {
+        for (let i = 1; i<=10; i++) {
+          suscritor.next(i);
+          this.myarray.push(i);
+        }
+        suscritor.complete();
+        // unsubscribe();
+        //this.numbers.subscribe(suscritor);
+   });
+  }
 
       //strings$ = new Observable(this.sequenceSubscriber);
       get numeros(){ return this.numbers };
 
 
     ngOnInit(): void {
+      this.emitir();
   }
 }
-// function emitir() : Observable<number> {
-//   return new Observable <number> (suscritor => {
-//         for (let i = 1; i<=10; i++) {
-//           suscritor.next(i);
 
-//         }
-//         suscritor.complete();
-//         unsubscribe();
-//         //this.numbers.subscribe(suscritor);
-//    });
-//   }
+
+
